@@ -1,0 +1,5 @@
+chromedriver.exe
+edgedriver.exe
+files/users.csv
+__pycache__
+*.zip
