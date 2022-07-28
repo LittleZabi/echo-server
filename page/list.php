@@ -13,12 +13,7 @@ if ($query->num_rows > 0) {
 ?>
 
 <div style="width: 18rem;">
-
-
-
-
     <div class="container">
-
         <div class="wrap">
             <?php
             foreach ($data as $item) {
@@ -26,9 +21,7 @@ if ($query->num_rows > 0) {
                 <a href="./view.php?url=<?php echo $item['slug']; ?>" class="btn btn-primary anchors" style="border-radius:0;margin-top: 5px;text-align:left;"><?php echo $item['filename']; ?></a>
             <?php
             }
-
             ?>
-
         </div>
     </div>
 </div>

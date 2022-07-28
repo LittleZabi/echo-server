@@ -11,8 +11,6 @@ if (isset($_POST['login'])) {
         echo '<pre>Try again username or email is incorrect</pre>';
     }
 }
-
-
 ?>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
 <style>
