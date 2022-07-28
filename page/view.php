@@ -33,7 +33,23 @@
             echo "<h2 class='card-title'>This page is empty with your shorts $slug</h2>";
             exit();
         }
+        function isUrl($str)
+        {
+            $regex = "((https?|ftp)\:\/\/)?"; // SCHEME 
+            $regex .= "([a-z0-9+!*(),;?&=\$_.-]+(\:[a-z0-9+!*(),;?&=\$_.-]+)?@)?"; // User and Pass 
+            $regex .= "([a-z0-9-.]*)\.([a-z]{2,3})"; // Host or IP 
+            $regex .= "(\:[0-9]{2,5})?"; // Port 
+            $regex .= "(\/([a-z0-9+\$_-]\.?)+)*\/?"; // Path 
+            $regex .= "(\?[a-z+&\$_.-][a-z0-9;:@&%=+\/\$_.-]*)?"; // GET Query 
+            $regex .= "(#[a-z_.-][a-z0-9+\$_.-]*)?"; // Anchor 
 
+            if (preg_match("/^$regex$/i", $str)) // `i` flag for case-insensitive
+            {
+                return true;
+            } else {
+                return false;
+            }
+        }
         ?>
     </div>
 </div>
@@ -94,15 +110,15 @@
             <?php
             if ($finalLink != '') {
             ?>
-                <a href="<?php echo $finalLink; ?>" onclick="" class="btn btn-danger btn-lg w-100" style="color: white">
-                    <?php echo $finalLink; ?>
+                <a href="<?php echo isUrl($finalLink)  ? $finalLink : '#' ?>" onclick="" class="btn btn-danger btn-lg w-100" style="color: white">
+                    <?php echo isUrl($finalLink)  ? $data['filename'] : $finalLink; ?>
                 </a>
             <?php
             } else {
             ?>
                 <button id="donwbtn" onclick="handleRequest('<?php echo $slug ?>')" class="btn btn-danger btn-lg w-100">
                     <i class="fas fa-chess-king"></i>
-                    Download Direct
+                    <?php echo $data['filename']; ?>
                 </button>
             <?php
             }
@@ -114,7 +130,8 @@
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Base url</th>
-                        <th scope="col">Slug</th>
+                        <th scope="col">Filename</th>
+                        <th scope="col">Token</th>
                         <th scope="col">Status</th>
                         <th scope="col">Result</th>
                         <th scope="col">Cache</th>
@@ -125,12 +142,12 @@
                     <tr>
                         <th scope="row"><?php echo $data['id']; ?></th>
                         <td><?php echo $data['base_url']; ?></td>
+                        <td><?php echo $data['filename']; ?></td>
                         <td><?php echo $data['slug']; ?></td>
                         <td><?php echo $data['complete'] ? 'Finded' : 'Not Tried Yet'; ?></td>
                         <td><?php echo $finalLink != '' ? $finalLink : 'Not Scrapped'; ?></td>
                         <td><?php echo $data['cache']; ?></td>
                         <td><?php echo date_format(date_create($data['createdAt']), 'd M Y') ?></td>
-
                     </tr>
 
                 </tbody>

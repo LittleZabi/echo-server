@@ -46,16 +46,22 @@ if (isset($_GET['msg'])) {
 
         <div class="wrap">
 
-            <form action="./op.php" method="GET" class="form-inline">
-
+            <form action="./op.php" method="GET" class="form" style="min-width: 400px;">
+                <h3>Enter File Details</h3>
                 <div class="form-group mx-sm-3 mb-2">
+                    <label for="filelink" style="text-align: left;display:block;font-size: 14px">Enter target file link</label>
                     <input type="text" id="filelink" name="file-link" class="form-control" placeholder="Enter target url...">
-                    <select class="form-control" name="cache-type">
-                        <option>Featured</option>
-                        <option>Non-featured</option>
-                    </select>
                 </div>
-                <button type="submit" name="submit-link" class="btn btn-primary mb-2">Save Link</button>
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="filelink" style="text-align: left;display:block;font-size: 14px">Enter file name</label>
+                    <input type="text" id="filelink" name="file-name" class="form-control" placeholder="Enter file name...">
+                </div>
+                <div class="form-group mx-sm-3 mb-2">
+                    <label for="filelink" style="text-align: left;display:block;font-size: 14px">Enter cache name (default is Feature)</label>
+                    <input type="text" id="filelink" name="cache-type" value="Featured" class="form-control" placeholder="Enter cache name...">
+                </div>
+                <br>
+                <button type="submit" name="submit-link" class="btn btn-primary mb-2 pl-5 pr-5" style="width: 200px;">Save</button>
             </form>
         </div>
     </div>

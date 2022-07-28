@@ -33,6 +33,8 @@ class Parasite:
     def __init__(self, linktype=''):
 
         self.botIsOpen = 1
+        self.botCacheBasePath = 'C:/firmwaresupport/test/'
+
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_experimental_option(
             "excludeSwitches", ["enable-automation"])
@@ -41,12 +43,17 @@ class Parasite:
         chrome_options.add_argument(
             "--disable-blink-features=AutomationControlled")
         chrome_options.add_argument("--log-level=3")
-        if linktype == 'Featured':
+
+        if linktype != '':
+            if linktype == 'Featured':
+                cache = 'halabtech-featured-cache'
+            else:
+                cache = linktype
             chrome_options.add_argument(
-                "user-data-dir=C:/firmwaresupport/test/halabtech-featured-cache")
+                f"user-data-dir={self.botCacheBasePath+cache}")
         else:
             chrome_options.add_argument(
-                "user-data-dir=C:/firmwaresupport/test/halabtech-cache")
+                "user-data-dir=C:/firmwaresupport/test/halabtech-featured-cache")
         chrome_options.add_experimental_option("detach", True)
         chrome_options.binary_location = r"C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
         self.bot = webdriver.Chrome(
@@ -72,6 +79,7 @@ class Parasite:
         self.bot.close()
 
     def CrackedMindBot(self, url, open_only_browser=False):
+
         if open_only_browser == True:
             self.OpenOnlyInBrowser(url)
             self.end_url = replies.on_browser_open_request
@@ -117,7 +125,7 @@ class Parasite:
             except:
                 pass
 
-            if 'utoken' in anchor:
+            if 'utoken' in anchor or 'vtoken' in anchor:
                 try:
                     self.bot.get(anchor)
                     time.sleep(1)

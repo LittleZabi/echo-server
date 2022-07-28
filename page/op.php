@@ -12,9 +12,10 @@ function random($limit)
 }
 if (isset($_GET['submit-link'])) {
     $link = $_GET['file-link'];
+    $filename = $_GET['file-name'];
     $cache = $_GET['cache-type'];
-    $slug =  random(20);
-    $sql = "INSERT INTO `fileslist` (`base_url`, `slug`, `cache`) VALUES ('$link', '$slug', '$cache')";
+    $slug =  random(12);
+    $sql = "INSERT INTO `fileslist` (`base_url`, `filename`, `slug`, `cache`) VALUES ('$link', '$filename', '$slug', '$cache')";
     $query = $db->query($sql);
     header('Location: ./insert.php?msg=Successfully added');
     exit('success');
@@ -25,23 +26,19 @@ if (isset($_GET['set-req'])) {
     $query = $db->query($sql);
     if ($query->num_rows > 0) {
         $item = $query->fetch_assoc();
+
         $sql = "SELECT * FROM `request_links` WHERE `file` ='$slug'";
         $q = $db->query($sql);
         if ($q->num_rows > 0) {
             header('Location: ./view.php?url=' . $slug . '&msg=Request is already set!');
         } else {
-            $cache = $item['cache'];
-            $sql = "INSERT INTO `request_links` (`file`, `cache`) VALUES('$slug', '$cache')";
+            $cache = $item['cache'] ?? 'Featured';
+            $filename = $item['filename'];
+            $file_id = $item['id'];
+            $sql = "INSERT INTO `request_links` (`file_id`, `file`,`filename`, `cache`) VALUES($file_id, '$slug','$filename', '$cache')";
             $db->query($sql);
             header('Location: ./view.php?url=' . $slug . '&msg=Request Successfully sent!');
         }
-        // if ($item['finalLink'] == '') {
-        //     $sql = "UPDATE `fileslist` SET `requested` = 1, `finalLink` = '' WHERE `slug` = '$slug'";
-        //     $db->query($sql);
-        //     header('Location: ./view.php?url=' . $slug . '&msg=Request Successfully sent!');
-        // } else {
-        //     echo $item['finalLink'];
-        // }
     } else {
 
         header('Location: ./view.php?msg=Error file does not exist');
