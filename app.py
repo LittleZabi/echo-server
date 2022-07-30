@@ -5,7 +5,6 @@ import os
 
 requests_count = 0
 if __name__ == '__main__':
-
     while True:
         requests_count += 1
         os.system('CLS')

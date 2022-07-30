@@ -1,4 +1,5 @@
 <?php
+require_once './header.php';
 session_start();
 if (isset($_SESSION['login'])) {
 } else {
