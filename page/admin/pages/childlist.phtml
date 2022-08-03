@@ -1,0 +1,82 @@
+<?php
+$sql  = "SELECT
+child_list.*,
+`fileslist`.`finalLink`,
+`fileslist`.`filename` as `parentFileName`,
+`requests`.`count` AS visitors,
+`fileslist`.`complete`
+FROM
+child_list,
+requests,
+fileslist
+WHERE
+`child_list`.`token` = `requests`.`child_token` AND `child_list`.`parent_file_id` = `fileslist`.`id`
+ORDER BY
+`child_list`.`id`
+DESC;";
+$k = $db->query($sql);
+$data = array();
+if ($k->num_rows > 0) {
+    while ($u = $k->fetch_assoc()) $data[] = $u;
+}
+?>
+<div class="container-fluid">
+
+    <h1 class="h3 mb-2 text-gray-800">Childs name list</h1>
+    <p class="mb-4">list of parent files change, insert, delete and update! </p>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Child name List
+            </h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Child ID</th>
+                            <th>Parent ID</th>
+                            <th>Child Name</th>
+                            <th>Final Link</th>
+                            <th>Token</th>
+                            <th>Visitors</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Child ID</th>
+                            <th>Parent ID</th>
+                            <th>Child Name</th>
+                            <th>Final Link</th>
+                            <th>Token</th>
+                            <th>Visitors</th>
+                            <th>Action</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <?php
+                        foreach ($data as $item) {
+                        ?>
+                            <tr>
+                                <td><?php echo $item['id']; ?></td>
+                                <td><?php echo $item['parent_file_id']; ?></td>
+                                <td><?php echo $item['new_filename']; ?></td>
+                                <td><?php echo $item['finalLink'] === '' ? 'Not Refer' : $item['finalLink']; ?></td>
+                                <td><?php echo $item['token']; ?></td>
+                                <td><?php echo $item['visitors']; ?></td>
+                                <td style="min-width: 210px">
+                                    <button class="btn btn-danger" onclick="handleDeleteChild(<?php echo $item['id']; ?>)">Delete</button>
+                                    <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="handleEditChild({id: <?php echo $item['id'] ?>, filename: '<?php echo $item['new_filename'] ?>', finalLink: '<?php echo $item['finalLink']; ?>', parentID: <?php echo $item['parent_file_id']; ?>, parentFileName:'<?php echo $item['parentFileName']; ?>'})">Edit</button>
+                                    <a href="<?php echo ROOT_VIEW  . $item['token']; ?>" target="_blank" class="btn btn-primary">View</a>
+                                </td>
+                            </tr>
+                        <?php
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,11 +1,32 @@
 <?php
-
 require_once('view-header.php');
+require_once('function.php');
+require_once './db.php';
+$ip = get_client_ip();
+
+$sql = "SELECT
+            *
+        FROM
+            visitors
+        WHERE
+            ip_address = '$ip';";
+$q = $db->query($sql);
+if ($q->num_rows > 0) {
+    $sql = "
+    UPDATE 
+        visitors
+    SET count = count + 1
+    WHERE
+    ip_address = '$ip'";
+    $q = $db->query($sql);
+} else {
+    $sql = "INSERT INTO visitors (ip_address) VALUES('$ip')";
+    $q = $db->query($sql);
+}
 ?>
 <div class="card">
     <div class="card-body">
         <?php
-        require_once './db.php';
         $slug = '...';
         $finalLink = '';
         if (isset($_GET['msg'])) {
@@ -18,6 +39,22 @@ require_once('view-header.php');
         if (isset($_GET['slug'])) {
             $slug = $_GET['slug'];
             $sql = "
+                    SELECT id FROM requests WHERE child_token = '$slug';
+                ";
+
+            $query = $db->query($sql);
+            if ($query->num_rows > 0) {
+
+                $sql = "
+                        UPDATE requests SET count = count + 1 WHERE child_token = '$slug';
+                    ";
+            } else {
+                $sql = "
+                        INSERT INTO requests (child_token) VALUES ('$slug');
+                    ";
+            }
+            $db->query($sql);
+            $sql = "
             SELECT
                 `child_list`.`id` AS `cid`,
                 `child_list`.`token`,
@@ -25,6 +62,7 @@ require_once('view-header.php');
                 `child_list`.`new_filename` AS `filename`,
                 `fileslist`.`base_url`,
                 `fileslist`.`finalLink`,
+                `fileslist`.`id` as pid,
                 `fileslist`.`complete`
             FROM
                 child_list,
@@ -33,7 +71,6 @@ require_once('view-header.php');
                 child_list.token = '$slug' AND child_list.parent_file_id = fileslist.id;   
                     ";
             $query = $db->query($sql);
-
             if ($query->num_rows > 0) {
                 $data = $query->fetch_assoc();
                 $finalLink = $data['finalLink'];
@@ -63,6 +100,7 @@ require_once('view-header.php');
                 return false;
             }
         }
+        $ku = isUrl($finalLink)  ? $finalLink : 0;
         ?>
     </div>
 </div>
@@ -116,13 +154,21 @@ require_once('view-header.php');
         <?php
         if ($finalLink != '') {
         ?>
-            <a href="<?php echo isUrl($finalLink)  ? $finalLink : '#' ?>" onclick="" class="btn btn-danger btn-lg w-100" style="color: white">
+            <button onclick="handleClientReq({
+                    parent: <?php echo $data['pid']; ?>,
+                    token: '<?php echo $data['token']; ?>',
+                    redirect: '<?php echo $ku ?>'
+                })" class="btn btn-danger btn-lg w-100" style="color: white">
                 <?php echo isUrl($finalLink)  ? $data['filename'] : $finalLink; ?>
-            </a>
+            </button>
         <?php
         } else {
         ?>
-            <button id="donwbtn" onclick="handleRequest(<?php echo $parentID ?>)" class="btn btn-danger btn-lg w-100">
+            <button id="donwbtn" onclick="handleRequest(<?php echo $parentID ?>, '<?php echo $slug; ?>', {
+                    parent: <?php echo $data['pid']; ?>,
+                    token: '<?php echo $data['token']; ?>',
+                    redirect: '<?php echo $ku ?>'
+                })" class="btn btn-danger btn-lg w-100">
                 <i class="fas fa-chess-king"></i>
                 <?php echo $data['filename']; ?>
             </button>
@@ -137,14 +183,22 @@ require_once('view-header.php');
 </body>
 
 <script>
-    const handleRequest = async (pid) => {
-        console.log(pid)
+    const handleClientReq = (data) => {
+        axios.get(`./op.php?client-req=1&id=${data.id}&parent=${data.parent}&token=${data.token}`).then(e => {
+            window.location.href = data.redirect == "0" ? '#' : data.redirect
+        }).catch(e => {
+            window.location.href = data.redirect == "0" ? '#' : data.redirect
+        })
+    }
+    const handleRequest = async (pid, token = "", data) => {
         handleLoading(true)
-        await axios.get('./op.php?set-req=1&pid=' + pid).then(e => {
+        await axios.get('./op.php?set-req=1&pid=' + pid + '&token=' + token).then(e => {
             console.log(e.data)
             document.querySelector('#message').innerHTML = e.data
+            handleClientReq(data)
         }).catch(e => {
             console.error(e.message)
+            handleClientReq(data)
         })
     }
     const handleLoading = status = () => {

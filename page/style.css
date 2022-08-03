@@ -87,7 +87,7 @@ section button {
   margin: auto;
   background: white;
   padding: 19px;
-  border-radius: 24px;
+  border-radius: 4px;
   max-height: 94vh;
   overflow: hidden;
 }
@@ -98,7 +98,6 @@ section button {
 }
 .super-container {
   height: 100%;
-  overflow-y: scroll;
   padding-right: 13px;
 }
 ::-webkit-scrollbar-track {
@@ -120,8 +119,41 @@ section button {
 .right {
   margin-left: 10px;
   width: 60%;
+  max-width: 726px;
   background: #ffffff;
   padding: 7px;
   border-radius: 5px;
   box-shadow: 0 0 5px 1px #00000014;
+}
+.wrap {
+  background-color: white !important;
+}
+
+.loading {
+  font-size: 22px;
+  display: block;
+  font-weight: bold;
+  padding: 20px;
+}
+#item-list > * {
+  word-break: break-all;
+}
+
+#item-list > small {
+  word-break: unset;
+  display: block;
+  width: 182px;
+  text-align: center;
+  height: 21px;
+}
+.list-group-item {
+  background: #fff3f3;
+  cursor: pointer;
+}
+.list-group-item.done {
+  background: #f3f9ff;
+}
+.done.active {
+  background-color: dodgerblue;
+  color: white;
 }

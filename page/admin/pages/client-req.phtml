@@ -1,0 +1,77 @@
+<?php
+$sql  = "SELECT
+`client_requests`.`ip_address`,`client_requests`.`createdAt`, `client_requests`.`id`, `child_list`.`new_filename` as `childname`,
+`fileslist`.`id` as `pid`, `fileslist`.`filename`, `fileslist`.`base_url`, `fileslist`.`finalLink`, `fileslist`.`cache`  FROM `client_requests`, child_list, `fileslist` WHERE `client_requests`.`file_slug` = `child_list`.`token` and `client_requests`.`parent_id` = `fileslist`.`id`";
+$k = $db->query($sql);
+$data = array();
+if ($k->num_rows > 0) {
+    while ($u = $k->fetch_assoc()) $data[] = $u;
+}
+?>
+<div class="container-fluid">
+
+    <h1 class="h3 mb-2 text-gray-800">Client Most Requested files</h1>
+    <p class="mb-4">List of client most requested file view by date</p>
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary"> Most Requested
+            </h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Child name</th>
+                            <th>Parent name</th>
+                            <th>Output</th>
+                            <th>IP Address</th>
+                            <th>Complete</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Child name</th>
+                            <th>Parent name</th>
+                            <th>Output</th>
+                            <th>IP Address</th>
+                            <th>Complete</th>
+                            <th>Action</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        <?php
+                        function filterDate($date)
+                        {
+                            $k = date_create($date);
+                            $k = date_format($k, 'j F Y H:i:s');
+                            return $k;
+                        }
+                        foreach ($data as $item) {
+                        ?>
+                            <tr>
+                                <td><?php echo $item['id']; ?></td>
+                                <td><?php echo filterDate($item['createdAt']); ?></td>
+                                <td><?php echo $item['childname']; ?></td>
+                                <td><?php echo $item['filename']; ?></td>
+                                <td><?php echo $item['finalLink'] != '' ? $item['finalLink'] : 'Not Refer'; ?></td>
+                                <td><?php echo $item['ip_address']; ?></td>
+                                <td><?php echo $item['complete'] ? 'Yes' : 'No'; ?></td>
+                                <td>
+                                    <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="handleEditFile({id: <?php echo $item['pid'] ?>, filename: '<?php echo $item['filename'] ?>', base_url:'<?php echo $item['base_url'] ?>', cache:'<?php echo $item['cache'] ?>', finalLink: '<?php echo $item['finalLink']; ?>'})">Edit</button>
+                                </td>
+                            </tr>
+                        <?php
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
