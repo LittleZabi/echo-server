@@ -1,5 +1,5 @@
-# serverURI = 'http://localhost:380'
-serverURI = 'https://aliunlockers.com'
+serverURI = 'http://localhost:380'
+# serverURI = 'https://aliunlockers.com'
 
 
 def __filter__(link):

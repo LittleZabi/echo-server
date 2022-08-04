@@ -2,7 +2,7 @@ from scrapper import Parasite
 from server import getLinks, saveOnServer
 import time
 import os
-
+from renamer import Renamer
 requests_count = 0
 if __name__ == '__main__':
     while True:
@@ -14,7 +14,9 @@ if __name__ == '__main__':
         try:
             links = getLinks()
             # print('link: ', links)
-            for link in links:
+
+            for link in links['fileslist']:
+                continue
                 scrap = Parasite(linktype=link['cache'])
                 scrap.CrackedMindBot(scrap.__filter__(
                     link['base_url']), open_only_browser=None)
@@ -32,6 +34,9 @@ if __name__ == '__main__':
                     print(f'ID: {link["id"]} | file ID: {link["base_url"]}')
 
                 scrap.destroy()
+            childList = links['child_list']
+            if len(childList) > 0:
+                renamer = Renamer(childList)
 
         except Exception as e:
             print('_-_-_- ERROR:', e)
