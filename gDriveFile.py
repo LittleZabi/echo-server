@@ -6,13 +6,13 @@ from googleapiclient.http import MediaFileUpload, MediaIoBaseDownload
 from google.auth.transport.requests import Request
 
 
-def Create_Service(client_secret_file, api_name, api_version, *scopes):
+def createService(client_secret_file, api_name, api_version, *scopes):
     #print(client_secret_file, api_name, api_version, scopes, sep='-')
     CLIENT_SECRET_FILE = client_secret_file
     API_SERVICE_NAME = api_name
     API_VERSION = api_version
     SCOPES = [scope for scope in scopes[0]]
-    #print(SCOPES)
+    # print(SCOPES)
 
     cred = None
 
@@ -27,7 +27,8 @@ def Create_Service(client_secret_file, api_name, api_version, *scopes):
         if cred and cred.expired and cred.refresh_token:
             cred.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRET_FILE, SCOPES)
+            flow = InstalledAppFlow.from_client_secrets_file(
+                CLIENT_SECRET_FILE, SCOPES)
             cred = flow.run_local_server()
 
         with open(pickle_file, 'wb') as token:
@@ -40,6 +41,7 @@ def Create_Service(client_secret_file, api_name, api_version, *scopes):
         print('Unable to connect.')
         print(e)
         return None
+
 
 def convert_to_RFC_datetime(year=1900, month=1, day=1, hour=0, minute=0):
     import datetime

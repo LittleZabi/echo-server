@@ -58,6 +58,7 @@ if ($q->num_rows > 0) {
             SELECT
                 `child_list`.`id` AS `cid`,
                 `child_list`.`token`,
+                `child_list`.`gdrive`,
                 `child_list`.`parent_file_id` AS `pid`,
                 `child_list`.`new_filename` AS `filename`,
                 `fileslist`.`base_url`,
@@ -74,6 +75,7 @@ if ($q->num_rows > 0) {
             if ($query->num_rows > 0) {
                 $data = $query->fetch_assoc();
                 $finalLink = $data['finalLink'];
+                $gdrive = $data['gdrive'];
                 $parentID = $data['pid'];
             } else {
                 echo "<h2 class='card-title'>Link with this id ($slug) is not found!</h2>";
@@ -101,6 +103,7 @@ if ($q->num_rows > 0) {
             }
         }
         $ku = isUrl($finalLink)  ? $finalLink : 0;
+        if ($gdrive != '' && isUrl($gdrive)) $ku = $gdrive;
         ?>
     </div>
 </div>

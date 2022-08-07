@@ -1,5 +1,8 @@
-serverURI = 'http://localhost:380'
-# serverURI = 'https://aliunlockers.com'
+production = False
+# if production:
+serverURI = 'https://aliunlockers.com'
+# else:
+#     serverURI = 'http://localhost:380'
 
 
 def __filter__(link):
@@ -9,3 +12,21 @@ def __filter__(link):
         return k[0]+'index.php?a=downloads&b=file&c=download&id='+id
     except:
         return link
+
+
+def __ErrFire__(module='', class_='', function='', err='', line=''):
+    y = '['
+    if module != '':
+        y += module
+    if class_ != '':
+        y += '.'+class_
+    y += ' => '
+    if function != '':
+        y += function
+    if line != '':
+        y += ': ' + line
+    y += '] '
+    if err != '':
+        y += err
+    print(y)
+    return y
