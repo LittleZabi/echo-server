@@ -5,6 +5,7 @@ from vars import production
 import os
 from renamer import Renamer
 requests_count = 0
+
 if __name__ == '__main__':
     while True:
         requests_count += 1
@@ -18,7 +19,6 @@ if __name__ == '__main__':
             # print('link: ', links)
 
             for link in links:
-                break
                 scrap = Parasite(linktype=link['cache'])
                 scrap.CrackedMindBot(scrap.__filter__(
                     link['base_url']), open_only_browser=None)

@@ -9,9 +9,9 @@ class Renamer:
         self.childList = childs
         self.root = '.'
         self.dataFile = self.root+'\\rename.csv'
-        self.finalLinks = self.root + '\\finalLinks.csv'
         self.folderID = '1P8ZR0bsQjSy_978FNKfPeKAl_er4wp0Q'
         self.renamerList = []
+        self.finalLinks = self.root + '\\finalLinks.csv'
         i = self.__write__()
         if i:
             self.__start__()
@@ -52,8 +52,13 @@ class Renamer:
                                 file.write(
                                     f"{final},{name},{self.folderID},{child_id}\n")
                             else:
-                                print(
-                                    f"{child['finalLink']} is not GDrive Link...")
+                                if 'mega' in child['finalLink']:
+                                    print(f"Parent link is Mega...")
+                                else:
+                                    print(f"Parent is not gDrive link...")
+                                with open(self.finalLinks, "a") as file:
+                                    file.write(
+                                        f"{child['finalLink']}, {child_id}\n")
                         except Exception as e:
                             __ErrFire__(module='renamer', function='__write__ for child in items',
                                         class_='renamer', err=e)

@@ -15,18 +15,22 @@ def __filter__(link):
 
 
 def __ErrFire__(module='', class_='', function='', err='', line=''):
-    y = '['
-    if module != '':
-        y += module
-    if class_ != '':
-        y += '.'+class_
-    y += ' => '
-    if function != '':
-        y += function
-    if line != '':
-        y += ': ' + line
-    y += '] '
-    if err != '':
-        y += err
-    print(y)
-    return y
+    try:
+        y = '['
+        if module != '':
+            y += module
+        if class_ != '':
+            y += '.'+class_
+        y += ' => '
+        if function != '':
+            y += function
+        if line != '':
+            y += ': ' + line
+        y += '] '
+        if err != '':
+            print(y, err)
+            return y, err
+        print(y)
+        return y
+    except Exception as e:
+        print('[renamer.py -> __ErrFire__] creating error: ', e)
