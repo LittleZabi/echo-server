@@ -1,8 +1,17 @@
+import os
 production = False
 # if production:
 serverURI = 'https://aliunlockers.com'
 # else:
 #     serverURI = 'http://localhost:380'
+
+
+def __logs__(text):
+    with open('logs.txt', 'w') as file:
+        try:
+            file.write(str(text)+'\n')
+        except:
+            print('Logs not saved: ', text)
 
 
 def __filter__(link):
@@ -12,6 +21,11 @@ def __filter__(link):
         return k[0]+'index.php?a=downloads&b=file&c=download&id='+id
     except:
         return link
+
+
+def loading(scale=3, before=''):
+    os.system('CLS')
+    print(f'{before}{"." * scale}',  end='\r\n')
 
 
 def __ErrFire__(module='', class_='', function='', err='', line=''):

@@ -4,20 +4,18 @@ import time
 from vars import production
 import os
 from renamer import Renamer
-requests_count = 0
-
+from vars import loading
+count = 0
+t = 0
 if __name__ == '__main__':
     while True:
-        requests_count += 1
-        if production:
-            os.system('CLS')
-        print('Listening server....')
-        print('requesting for ', requests_count, ' time')
-        print()
+        if count >= 3:
+            count = 0
+        count += 1
+        t += 1
+        loading(before=f'Listening server [{t}]', scale=count)
         try:
             links = getLinks()
-            # print('link: ', links)
-
             for link in links:
                 scrap = Parasite(linktype=link['cache'])
                 scrap.CrackedMindBot(scrap.__filter__(
@@ -38,10 +36,10 @@ if __name__ == '__main__':
                 scrap.destroy()
 
             childs = getChilds()
-            print('Childs: ', childs)
             if len(childs) > 0:
+                print('Renaming links: ', len(childs))
                 renamer = Renamer(childs)
 
         except Exception as e:
             print('_-_-_- ERROR:', e)
-        time.sleep(5)
+        time.sleep(3)

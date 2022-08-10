@@ -388,6 +388,8 @@ const handleEditChild = (item) => {
             <input type="text" value="${item.parentFileName}" class="form-control" id="parent-name">
             <label  class="col-form-label">Update final link.</label>
             <input type="text" value="${item.finalLink}" class="form-control" id="final-link">
+            <label  class="col-form-label">Update gdrive rename link.</label>
+            <input type="text" value="${item.Rename}" class="form-control" id="renamed">
         </div>
         `;
     form.innerHTML = html;
@@ -461,6 +463,7 @@ const saveChildChanges = async (element) => {
   const y = element.innerHTML;
   element.innerHTML = "Loading...";
   let id = document.querySelector("#fileID").value;
+  let renamedLink = document.querySelector("#renamed").value;
   let to = document.querySelector("#filename").value;
   let pid = document.querySelector("#pid").value;
   let parentName = document.querySelector("#parent-name").value;
@@ -480,6 +483,7 @@ const saveChildChanges = async (element) => {
       pid,
       parentName,
       finalLink,
+      renamedLink,
     },
     success: (e) => {
       element.innerHTML = y;

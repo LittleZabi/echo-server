@@ -38,26 +38,29 @@ def saveOnServer(id=False, final=''):
     return response.text
 
 
-def saveChildNames():
-    print('called________________________')
-    names = []
+def replacer(str_):
+    return str_.replace('\n', '').replace('\t', '').replace('\r', '')
 
+
+def saveChildNames():
+    names = []
     finalLinks = '.\\finalLinks.csv'
     try:
         with open(finalLinks, 'r', encoding='utf-8') as file:
             n = file.readlines()
-            for k in n:
-                k = k.split(',')
-                i = k[0].replace('\n', '')
-                y = k[1].replace('\n', '')
-                t = {'id': y, 'link': i}
-                names.append(t)
-            headers = UserAgent().random
-            print('data: ', {'names': 1, 'childs': names})
-            r = requests.post(base_url, json={'names': 1, 'childs': names}, headers={
-                "Content-type": headers})
-            print('Server Response: ', r.text)
-            return r.text
+            if len(n) > 0:
+                for k in n:
+                    k = k.split(',')
+                    i = replacer(k[0])
+                    y = replacer(k[1])
+                    t = {'id': y, 'link': i}
+                    names.append(t)
+                headers = UserAgent().random
+                r = requests.post(base_url, json={'names': 1, 'childs': names}, headers={
+                    "Content-type": headers})
+                return r.text
+            else:
+                print('Not Saved Empty file finalLinks.csv')
         return False
     except Exception as e:
         print('[SERVER saveChildNames]', e)

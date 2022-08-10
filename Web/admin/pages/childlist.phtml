@@ -38,6 +38,7 @@ if ($k->num_rows > 0) {
                             <th>Parent ID</th>
                             <th>Child Name</th>
                             <th>Final Link</th>
+                            <th>Renamed Link</th>
                             <th>Token</th>
                             <th>Visitors</th>
                             <th>Action</th>
@@ -49,6 +50,7 @@ if ($k->num_rows > 0) {
                             <th>Parent ID</th>
                             <th>Child Name</th>
                             <th>Final Link</th>
+                            <th>Renamed Link</th>
                             <th>Token</th>
                             <th>Visitors</th>
                             <th>Action</th>
@@ -63,11 +65,12 @@ if ($k->num_rows > 0) {
                                 <td><?php echo $item['parent_file_id']; ?></td>
                                 <td><?php echo $item['new_filename']; ?></td>
                                 <td><?php echo $item['finalLink'] === '' ? 'Not Refer' : $item['finalLink']; ?></td>
+                                <td><?php echo $item['gdrive'] == '' ? 'Not Renamed' : $item['gdrive']; ?></td>
                                 <td><?php echo $item['token']; ?></td>
                                 <td><?php echo $item['visitors']; ?></td>
                                 <td style="min-width: 210px">
                                     <button class="btn btn-danger" onclick="handleDeleteChild(<?php echo $item['id']; ?>)">Delete</button>
-                                    <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="handleEditChild({id: <?php echo $item['id'] ?>, filename: '<?php echo $item['new_filename'] ?>', finalLink: '<?php echo $item['finalLink']; ?>', parentID: <?php echo $item['parent_file_id']; ?>, parentFileName:'<?php echo $item['parentFileName']; ?>'})">Edit</button>
+                                    <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="handleEditChild({id: <?php echo $item['id'] ?>, filename: '<?php echo $item['new_filename'] ?>', finalLink: '<?php echo $item['finalLink']; ?>', parentID: <?php echo $item['parent_file_id']; ?>, parentFileName:'<?php echo $item['parentFileName']; ?>', Rename: '<?php echo $item['gdrive']; ?>'})">Edit</button>
                                     <a href="<?php echo ROOT_VIEW  . $item['token']; ?>" target="_blank" class="btn btn-primary">View</a>
                                 </td>
                             </tr>

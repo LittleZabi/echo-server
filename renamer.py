@@ -19,7 +19,6 @@ class Renamer:
             print('[RENAMER] Error on Writing file')
 
     def __start__(self):
-        print('starting...')
         t = doRename()
         q = saveChildNames()
         if q == 'success':
@@ -47,10 +46,11 @@ class Renamer:
                             final = child['finalLink']
                             name = child['new_filename']
                             child_id = child['child_id']
+                            gDriveFinalLink = final
                             final = self.__driveToken__(final)
                             if final != False:
                                 file.write(
-                                    f"{final},{name},{self.folderID},{child_id}\n")
+                                    f"{final},{name},{self.folderID},{child_id},{gDriveFinalLink}\n")
                             else:
                                 if 'mega' in child['finalLink']:
                                     print(f"Parent link is Mega...")
@@ -74,6 +74,7 @@ class Renamer:
         if 'drive.google' in link:
             k = link.split('/file/d/')[1]
             k = k.split('/view')[0]
+            k = k.replace('\t', '')
             return k
         else:
             return False

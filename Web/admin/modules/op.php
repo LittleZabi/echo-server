@@ -154,11 +154,12 @@ if (isset($_GET['add-child'])) {
 if (isset($_POST['updateName'])) {
     $id = clear($_POST['id']);
     $filename = clear($_POST['to']);
+    $renamedLink = clear($_POST['renamedLink']);
     $parentName = clear($_POST['parentName']);
     $finalLink = clear($_POST['finalLink']);
     $complete = $finalLink != '' ? 1 : 0;
     $pid = clear($_POST['pid']);
-    $sql = "UPDATE child_list SET `new_filename` = '$filename' WHERE id = $id";
+    $sql = "UPDATE child_list SET `new_filename` = '$filename', `gdrive` = '$renamedLink' WHERE id = $id";
     $query = $db->query($sql);
     $sql = "UPDATE fileslist SET `filename` = '$parentName', `complete` = $complete, `finalLink` = '$finalLink' WHERE id = $pid";
     $query = $db->query($sql);

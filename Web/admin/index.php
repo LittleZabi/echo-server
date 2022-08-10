@@ -1,4 +1,10 @@
 <?php
+session_start();
+print_r($_SESSION);
+exit();
+if (!isset($_SESSION['login'])) {
+  header('location: ./login.php');
+}
 define('PATH', __DIR__);
 define('ROOT_VIEW', '/page/view.php?slug=');
 // define('ROOT_VIEW', 'https://aliunlockers.com/kandle/view.php?slug=');
